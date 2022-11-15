@@ -4,6 +4,9 @@ import numpy as np
 import time
 from matplotlib import pyplot as plt
 
+
+#Basic setup for DataFrame
+
 #Default Path of CSV(in current folder)
 path = "abc.csv"
 
@@ -29,6 +32,38 @@ base_df = pd.read_csv(path)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 time.sleep(2)
+
+
+    
+#Defining main menu
+def main_menu():
+    #Various options that are to be displayed on Users Screen
+    print("-------------------Python and CSV Connectivity-------------------")
+    print("------------------Currently Available DataFrame------------------")
+    print("")
+    print("                      Your CSV file's Records                    ")
+    print(base_df)
+    print("")
+    print("Choose any number to perform a task")
+    print("Currently available options are:")
+    print("========== Displaying Data ==========")
+    print("1.Show DataFrame")
+    print("2.Displaying DataFrame without indexes")
+    print("======== Visualization of data ==========")
+    print("3.Single Line Charts")
+    print("4.Multiple Line Charts")
+    print("5.Bar Charts")
+    print("======== Additional Functions =======")
+    print("6.Sorting data as per requirement")
+    print("7.Reading top and bottom records as per users requirement")
+    print("8.Accessing a particular column")
+    print("9.Copying and saving the DataFrame as csv file")
+    print("10.Renaming a index")
+    print("11.Renaming a column")
+    print("=====================================")
+    print("Press 0 to quit")
+    print("=====================================")
+
              
 
 #Defining Methods
@@ -124,7 +159,7 @@ def multiple_line_chart():
                 pass
             else:
                 if pair1[2] == pair2[2]:
-                    print(count_multi,pair1,pair2)
+                    print(count_multi,pair1[1],"vs",pair1[2],"and",pair2[1],"vs",pair2[2])
                     avail_multi.append([count_multi,pair1,pair2])
                     count_multi += 1
                     
@@ -242,40 +277,73 @@ def extracting_rows():
     print("What you want to do ?")
     print("1.Extracting top rows")
     print("2.Extracting bottom rows")
+    print("3.From both top and bottom")
     choice = int(input("choose any one:"))
     if choice == 1:
         n = int(input("How Many Rows From Above:"))
         print(base_df.head(n))
     elif choice == 2:
-        n = int(input("How Many Rows From bottom:"))
-        print(base_df.tail(n))
-        
+        m = int(input("How Many Rows From bottom:"))
+        print(base_df.tail(m))
+    elif choice == 3:
+        n = int(input("How Many Rows From Above:"))
+        m = int(input("How Many Rows From bottom:"))
+        print("From above")
+        print(base_df.head(n))
+        print("From bottom")
+        print(base_df.tail(m))
 
+
+def particular_column():
+    print("Which column u want to extract")
+    #Here we extract the particular column names of the dataframe
+    available_col = base_df.columns
     
+    #By for loop we print every available options to user
+    count = 1
+    for column_name in available_col:
+        print(count,column_name)
+        count +=1
+    
+    #Now we take input from user
+    choice = int(input("Which column u want to extract:"))
+    
+    #Here we check that user has entered a valid choice
+    #And if choice is valid we print it
+    if choice <= len(available_col):
+        #Here we do minus 1 because index is less than actual position in whole number than in natural number
+        col = available_col[(choice-1)]
+        print(base_df[col])
+        
+    #If user entered invalid option
+    else:
+        print("Invalid Choice")
+
+
+
+def exporting_file():
+    df_copy = pd.DataFrame(base_df,copy = True)
+    export_address = input(r"Enter a valid path where u want to save csv file")
+    
+    df_copy.to_csv(export_address)
+    print("Saved in",export_address)
+    
+    df_copy.to_csv("new.csv")
+    print("Sorry your path isnt valid. Saved in current directory")
+
+
+
+def rename_index():
+    print("How to rename a index:")
+    print("enter index in form of dictionary")
+    
+        
 #Running a valid loop
 run = True
 while run:
     time.sleep(4)
-    #Various options that are to be displayed on Users Screen
-    print("-------------------Python and CSV Connectivity-------------------")
-    print("------------------Currently Available DataFrame------------------")
-    print("")
-    print("                      Your CSV file's Records                    ")
-    print(base_df)
-    print("")
-    print("Choose any number to perform a task")
-    print("Currently available options are:")
-    print("========== Displaying Data ==========")
-    print("1.Show DataFrame")
-    print("2.Displaying DataFrame without indexes")
-    print("======== Visualization of data ==========")
-    print("3.Single Line Charts")
-    print("4.Multiple Line Charts")
-    print("5.Bar Charts")
-    print("======== Additional Functions =======")
-    print("6.Sorting data as per requirement")
-    print("7.Reading top and bottom records as per users requirement")
-    print("=====================================")
+
+    main_menu()
     
     #Taking inputs and executing it
     task = int(input("Now which function you need to perform: "))
@@ -294,6 +362,12 @@ while run:
         sorting_data()
     elif task == 7:
         extracting_rows()
+    elif task == 8:
+        particular_column()
+    elif task == 9:
+        exporting_file()
+    elif task == 0:
+        run = False
     else:
         print("Invalid Choice")
 
